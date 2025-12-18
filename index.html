@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>115學年度商管群與資管類甄選入學查詢系統 (無超額篩選版)</title>
+    <title>115學年度商管群與資管類甄選入學查詢系統</title>
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -35,1108 +35,743 @@
 
     // ============================================================
     // 資料庫
-    // 移除 tiebreakerV 與 tiebreakerSum
+    // tiebreakerV: 依據 CSV V/X 轉換 (true/false)
+    // tiebreakerSum: 依據原 tiebreaker 字串提取的分數
     // ============================================================
     const admissionsData = [
-    {
-        "id": "101013",
-        "group": "商管群",
-        "school": "國立臺灣科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 4, "eng": 4, "math": 4, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(13)", "英文(13)", "數學(14)", "專一專二(27)"]
-    },
-    {
-        "id": "101014",
-        "group": "資管類",
-        "school": "國立臺灣科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 5, "eng": 4, "math": 3, "pro1": 2, "pro2": 2 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "101016",
-        "group": "資管類",
-        "school": "國立臺灣科技大學",
-        "dept": "資訊管理系（資安人才）",
-        "ratios": { "chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 3 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "102020",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "工業工程與管理系",
-        "ratios": { "chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(11)", "專一(13)"]
-    },
-    {
-        "id": "102021",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 10, "eng": 8, "math": 6, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文(12)", "數學(11)", "專一專二(25)"]
-    },
-    {
-        "id": "102024",
-        "group": "資管類",
-        "school": "國立雲林科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 0, "eng": 7, "math": 7, "pro1": 3, "pro2": 4 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "102026",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "財務金融系",
-        "ratios": { "chi": 0, "eng": 0, "math": 10, "pro1": 7, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(13)", "專一(13)", "專二(13)"]
-    },
-    {
-        "id": "102028",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "會計系",
-        "ratios": { "chi": 7, "eng": 7, "math": 7, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文英文數學(28)", "專一專二(26)"]
-    },
-    {
-        "id": "102029",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "國際管理學士學位學程",
-        "ratios": { "chi": 0, "eng": 6, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(13)", "專一(13)"]
-    },
-    {
-        "id": "102045",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "應用外語系",
-        "ratios": { "chi": 7, "eng": 5, "math": 8, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(11)", "國文(10)", "英文(13)", "專一專二(23)"]
-    },
-    {
-        "id": "102049",
-        "group": "商管群",
-        "school": "國立雲林科技大學",
-        "dept": "文化資產維護系",
-        "ratios": { "chi": 6, "eng": 5, "math": 0, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文(10)", "專一(11)", "專二(11)"]
-    },
-    {
-        "id": "103008",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "植物醫學系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "專二: 3→0",
-        "screening": ["國文(10)", "專一專二(18)"]
-    },
-    {
-        "id": "103025",
-        "group": "資管類",
-        "school": "國立屏東科技大學",
-        "dept": "水土保持系",
-        "ratios": { "chi": 7, "eng": 0, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "國文: 0→7, 專一: 7→0",
-        "screening": []
-    },
-    {
-        "id": "103033",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "農企業管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 5, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(7)", "專二(8)"]
-    },
-    {
-        "id": "103037",
-        "group": "資管類",
-        "school": "國立屏東科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 0, "pro1": 6, "pro2": 3 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "103039",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "工業管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "英文: 5→0, 專二: 3→0",
-        "screening": ["國文(4)", "英文(3)", "專一專二(17)"]
-    },
-    {
-        "id": "103040",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 4 },
-        "change": "無變更",
-        "screening": ["國文(8)", "專二(8)", "專一(10)"]
-    },
-    {
-        "id": "103045",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "時尚設計與管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(11)", "專一(8)"]
-    },
-    {
-        "id": "103047",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "財務金融國際學士學位學程",
-        "ratios": { "chi": 0, "eng": 7, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(9)", "專一專二(22)"]
-    },
-    {
-        "id": "103050",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "應用外語系",
-        "ratios": { "chi": 0, "eng": 6, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "103053",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "社會工作系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(7)", "專一專二(17)"]
-    },
-    {
-        "id": "103056",
-        "group": "商管群",
-        "school": "國立屏東科技大學",
-        "dept": "休閒運動健康系",
-        "ratios": { "chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(8)", "專一(10)"]
-    },
-    {
-        "id": "103058",
-        "group": "資管類",
-        "school": "國立屏東科技大學",
-        "dept": "休閒運動健康系",
-        "ratios": { "chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "104024",
-        "group": "商管群",
-        "school": "國立臺北科技大學",
-        "dept": "工業工程與管理系",
-        "ratios": { "chi": 0, "eng": 4, "math": 4, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(27)", "專二(13)"]
-    },
-    {
-        "id": "104025",
-        "group": "商管群",
-        "school": "國立臺北科技大學",
-        "dept": "經營管理系",
-        "ratios": { "chi": 0, "eng": 6, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(13)", "專一專二(27)"]
-    },
-    {
-        "id": "104027",
-        "group": "商管群",
-        "school": "國立臺北科技大學",
-        "dept": "資訊與財金管理系",
-        "ratios": { "chi": 6, "eng": 6, "math": 6, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文英文數學(39)", "專一(14)", "專二(13)"]
-    },
-    {
-        "id": "105005",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "工業工程與管理系",
-        "ratios": { "chi": 5, "eng": 0, "math": 7, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["數學(11)", "國文(11)", "專一(12)"]
-    },
-    {
-        "id": "105044",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "國際企業系",
-        "ratios": { "chi": 7, "eng": 5, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 9→7, 英文: 6→5",
-        "screening": ["國文(11)", "英文(12)", "專一(13)"]
-    },
-    {
-        "id": "105047",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 4→8, 英文: 6→0",
-        "screening": ["國文(11)", "英文(12)", "專一(13)"]
-    },
-    {
-        "id": "105051",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3 },
-        "change": "專一: 5→4",
-        "screening": ["英文數學(22)", "專一(12)", "專二(13)"]
-    },
-    {
-        "id": "105052",
-        "group": "資管類",
-        "school": "國立高雄科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3 },
-        "change": "專一: 5→4",
-        "screening": []
-    },
-    {
-        "id": "105053",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "運籌管理系",
-        "ratios": { "chi": 0, "eng": 5, "math": 5, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(22)", "專一(12)", "專二(13)"]
-    },
-    {
-        "id": "105056",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "行銷與流通管理系",
-        "ratios": { "chi": 0, "eng": 4, "math": 5, "pro1": 0, "pro2": 3 },
-        "change": "國文: 4→0, 數學: 4→5, 專一: 3→0",
-        "screening": ["國文英文數學(32)", "專一專二(22)"]
-    },
-    {
-        "id": "105059",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "風險管理與保險系",
-        "ratios": { "chi": 6, "eng": 0, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(11)", "數學(11)", "專一(11)"]
-    },
-    {
-        "id": "105061",
-        "group": "資管類",
-        "school": "國立高雄科技大學",
-        "dept": "風險管理與保險系",
-        "ratios": { "chi": 6, "eng": 0, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "105062",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "金融系",
-        "ratios": { "chi": 7, "eng": 5, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文(11)", "專二(12)"]
-    },
-    {
-        "id": "105063",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "財務管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 5, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(13)", "專二(13)"]
-    },
-    {
-        "id": "105064",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "人力資源發展系",
-        "ratios": { "chi": 6, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(10)", "英文(11)", "專一(11)"]
-    },
-    {
-        "id": "105065",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "會計資訊系",
-        "ratios": { "chi": 8, "eng": 0, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "國文: 4→8",
-        "screening": ["國文(11)", "專二(12)"]
-    },
-    {
-        "id": "105066",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "金融資訊系",
-        "ratios": { "chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3 },
-        "change": "國文: 8→0, 英文: 0→6, 專一: 3→4",
-        "screening": ["國文(10)", "英文(11)", "專一(11)"]
-    },
-    {
-        "id": "105067",
-        "group": "資管類",
-        "school": "國立高雄科技大學",
-        "dept": "金融資訊系",
-        "ratios": { "chi": 6, "eng": 0, "math": 6, "pro1": 3, "pro2": 3 },
-        "change": "國文: 8→6",
-        "screening": []
-    },
-    {
-        "id": "105068",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "財政稅務系",
-        "ratios": { "chi": 8, "eng": 6, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文(11)", "專二(12)"]
-    },
-    {
-        "id": "105069",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "觀光管理系",
-        "ratios": { "chi": 7, "eng": 7, "math": 0, "pro1": 3, "pro2": 5 },
-        "change": "國文: 4→7, 英文: 0→7, 專二: 0→5",
-        "screening": ["國文(11)", "專一(10)"]
-    },
-    {
-        "id": "105073",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "智慧商務系",
-        "ratios": { "chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(11)", "專一(13)"]
-    },
-    {
-        "id": "105074",
-        "group": "資管類",
-        "school": "國立高雄科技大學",
-        "dept": "智慧商務系",
-        "ratios": { "chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "105075",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "航運管理系",
-        "ratios": { "chi": 0, "eng": 5, "math": 0, "pro1": 3, "pro2": 4 },
-        "change": "無變更",
-        "screening": ["英文(11)", "專二(10)", "專一(11)"]
-    },
-    {
-        "id": "105078",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "商務資訊應用系",
-        "ratios": { "chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(13)", "數學(8)", "專一(10)"]
-    },
-    {
-        "id": "105079",
-        "group": "資管類",
-        "school": "國立高雄科技大學",
-        "dept": "商務資訊應用系",
-        "ratios": { "chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "105080",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "供應鏈管理系",
-        "ratios": { "chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(11)", "數學(10)", "專一(10)"]
-    },
-    {
-        "id": "105083",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "海洋休閒管理系",
-        "ratios": { "chi": 0, "eng": 8, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(10)", "專一(11)"]
-    },
-    {
-        "id": "105086",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "應用英語系",
-        "ratios": { "chi": 0, "eng": 5, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(13)", "專一(12)"]
-    },
-    {
-        "id": "105088",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "應用日語系",
-        "ratios": { "chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(13)", "專一(11)"]
-    },
-    {
-        "id": "105091",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "應用德語系",
-        "ratios": { "chi": 6, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(8)", "英文(12)", "專一(10)"]
-    },
-    {
-        "id": "105095",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "文化創意產業系",
-        "ratios": { "chi": 5, "eng": 5, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 4→5, 英文: 4→5, 專二: 3→0",
-        "screening": ["國文英文(22)", "專一專二(21)"]
-    },
-    {
-        "id": "105101",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "漁業科技與管理系",
-        "ratios": { "chi": 7, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(6)", "專一(10)"]
-    },
-    {
-        "id": "105118",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "航運技術系",
-        "ratios": { "chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(10)", "專一(11)"]
-    },
-    {
-        "id": "105124",
-        "group": "商管群",
-        "school": "國立高雄科技大學",
-        "dept": "海事資訊科技系",
-        "ratios": { "chi": 0, "eng": 6, "math": 6, "pro1": 3, "pro2": 0 },
-        "change": "國文: 3→0, 英文: 5→6, 數學: 4→6, 專二: 2→0",
-        "screening": ["英文(12)", "數學(6)", "國文專一(18)", "專二(8)"]
-    },
-    {
-        "id": "107024",
-        "group": "資管類",
-        "school": "國立虎尾科技大學",
-        "dept": "資訊工程系",
-        "ratios": { "chi": 0, "eng": 0, "math": 7, "pro1": 3, "pro2": 0 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "107030",
-        "group": "商管群",
-        "school": "國立虎尾科技大學",
-        "dept": "工業管理系",
-        "ratios": { "chi": 8, "eng": 0, "math": 9, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(6)", "國文(9)", "專二(10)"]
-    },
-    {
-        "id": "107032",
-        "group": "商管群",
-        "school": "國立虎尾科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 14, "eng": 0, "math": 0, "pro1": 3, "pro2": 10 },
-        "change": "無變更",
-        "screening": ["國文(9)", "專二(10)", "專一(13)"]
-    },
-    {
-        "id": "107033",
-        "group": "資管類",
-        "school": "國立虎尾科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 14, "eng": 0, "math": 0, "pro1": 3, "pro2": 10 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "107034",
-        "group": "商管群",
-        "school": "國立虎尾科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(10)", "專一(12)"]
-    },
-    {
-        "id": "107036",
-        "group": "商管群",
-        "school": "國立虎尾科技大學",
-        "dept": "財務金融系",
-        "ratios": { "chi": 0, "eng": 11, "math": 0, "pro1": 7, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(10)", "專一(11)", "專二(12)"]
-    },
-    {
-        "id": "107044",
-        "group": "商管群",
-        "school": "國立虎尾科技大學",
-        "dept": "應用外語系",
-        "ratios": { "chi": 0, "eng": 9, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(6)", "專一(11)"]
-    },
-    {
-        "id": "109011",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "行銷與物流管理系",
-        "ratios": { "chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(4)", "專一(4)"]
-    },
-    {
-        "id": "109012",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "航運管理系",
-        "ratios": { "chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(2)", "專一專二(12)"]
-    },
-    {
-        "id": "109015",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 0→10, 數學: 5→0",
-        "screening": ["數學(2)", "專一(4)"]
-    },
-    {
-        "id": "109016",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "應用外語系",
-        "ratios": { "chi": 5, "eng": 4, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(5)", "英文(3)", "專一專二(7)"]
-    },
-    {
-        "id": "109019",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "觀光休閒系",
-        "ratios": { "chi": 4, "eng": 0, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(5)", "專一專二(9)"]
-    },
-    {
-        "id": "109022",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "餐旅管理系",
-        "ratios": { "chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 0→10, 數學: 5→0",
-        "screening": ["數學(4)", "專一(5)"]
-    },
-    {
-        "id": "109024",
-        "group": "商管群",
-        "school": "國立澎湖科技大學",
-        "dept": "海洋遊憩系",
-        "ratios": { "chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(5)", "專一(5)"]
-    },
-    {
-        "id": "110012",
-        "group": "資管類",
-        "school": "國立勤益科技大學",
-        "dept": "資訊工程系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "110022",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "工業工程與管理系",
-        "ratios": { "chi": 5, "eng": 0, "math": 5, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文數學(19)", "專一專二(20)"]
-    },
-    {
-        "id": "110026",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 0, "pro1": 3, "pro2": 6 },
-        "change": "無變更",
-        "screening": ["專二(9)", "專一(11)"]
-    },
-    {
-        "id": "110029",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 5 },
-        "change": "無變更",
-        "screening": ["國文(10)", "專二(10)", "專一(11)"]
-    },
-    {
-        "id": "110030",
-        "group": "資管類",
-        "school": "國立勤益科技大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 5 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "110031",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "行銷與流通管理系",
-        "ratios": { "chi": 6, "eng": 5, "math": 5, "pro1": 3, "pro2": 0 },
-        "change": "國文: 5→6, 英文: 4→5, 數學: 4→5",
-        "screening": ["國文(10)", "英文數學(18)", "專一(10)"]
-    },
-    {
-        "id": "110032",
-        "group": "資管類",
-        "school": "國立勤益科技大學",
-        "dept": "行銷與流通管理系",
-        "ratios": { "chi": 5, "eng": 5, "math": 5, "pro1": 3, "pro2": 0 },
-        "change": "國文: 4→5, 英文: 4→5, 數學: 4→5",
-        "screening": []
-    },
-    {
-        "id": "110033",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "健康產業科技研發與管理系",
-        "ratios": { "chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(10)", "專一(10)"]
-    },
-    {
-        "id": "110036",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "應用英語系",
-        "ratios": { "chi": 6, "eng": 6, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文英文(22)", "專一(11)"]
-    },
-    {
-        "id": "110039",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "文化創意事業系",
-        "ratios": { "chi": 5, "eng": 6, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(10)", "國文(9)", "專一(10)"]
-    },
-    {
-        "id": "110046",
-        "group": "商管群",
-        "school": "國立勤益科技大學",
-        "dept": "人工智慧應用工程系",
-        "ratios": { "chi": 5, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "110048",
-        "group": "資管類",
-        "school": "國立勤益科技大學",
-        "dept": "資訊管理系（資安人才）",
-        "ratios": { "chi": 50, "eng": 0, "math": 0, "pro1": 49, "pro2": 49 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "111001",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "護理系",
-        "ratios": { "chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "111004",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "高齡健康照護系",
-        "ratios": { "chi": 4, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文英文(20)", "專一(11)"]
-    },
-    {
-        "id": "111007",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "健康事業管理系",
-        "ratios": { "chi": 0, "eng": 8, "math": 4, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(7)", "數學(10)", "專二(9)"]
-    },
-    {
-        "id": "111009",
-        "group": "資管類",
-        "school": "國立臺北護理健康大學",
-        "dept": "健康事業管理系",
-        "ratios": { "chi": 0, "eng": 8, "math": 4, "pro1": 0, "pro2": 3 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "111012",
-        "group": "資管類",
-        "school": "國立臺北護理健康大學",
-        "dept": "資訊管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 8, "pro1": 6, "pro2": 3 },
-        "change": "無變更",
-        "screening": []
-    },
-    {
-        "id": "111013",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "休閒產業與健康促進系",
-        "ratios": { "chi": 0, "eng": 8, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(13)", "專一(12)"]
-    },
-    {
-        "id": "111023",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "運動保健系",
-        "ratios": { "chi": 8, "eng": 8, "math": 0, "pro1": 8, "pro2": 3 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "111025",
-        "group": "商管群",
-        "school": "國立臺北護理健康大學",
-        "dept": "生死與健康心理諮商系",
-        "ratios": { "chi": 8, "eng": 5, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文(11)", "專二(11)"]
-    },
-    {
-        "id": "111028",
-        "group": "資管類",
-        "school": "國立臺北護理健康大學",
-        "dept": "資訊管理系（資安人才）",
-        "ratios": { "chi": 0, "eng": 0, "math": 8, "pro1": 6, "pro2": 3 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "112003",
-        "group": "商管群",
-        "school": "國立高雄餐旅大學",
-        "dept": "餐旅暨會展行銷管理系",
-        "ratios": { "chi": 5, "eng": 4, "math": 4, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["國文(11)", "英文數學(20)", "專一(9)"]
-    },
-    {
-        "id": "112007",
-        "group": "商管群",
-        "school": "國立高雄餐旅大學",
-        "dept": "旅運管理系",
-        "ratios": { "chi": 8, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "新系科或名稱變更",
-        "screening": []
-    },
-    {
-        "id": "112009",
-        "group": "商管群",
-        "school": "國立高雄餐旅大學",
-        "dept": "航空暨運輸服務管理系",
-        "ratios": { "chi": 4, "eng": 4, "math": 4, "pro1": 0, "pro2": 3 },
-        "change": "專一: 3→0",
-        "screening": ["國文英文數學(31)", "專一專二(20)"]
-    },
-    {
-        "id": "112012",
-        "group": "商管群",
-        "school": "國立高雄餐旅大學",
-        "dept": "休閒暨遊憩管理系",
-        "ratios": { "chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 0→8, 英文: 4→0",
-        "screening": ["英文(11)", "專一(9)"]
-    },
-    {
-        "id": "113001",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "國際貿易與經營系",
-        "ratios": { "chi": 0, "eng": 4, "math": 5, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(5)", "英文(11)", "專一專二(22)"]
-    },
-    {
-        "id": "113003",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "財政稅務系",
-        "ratios": { "chi": 0, "eng": 4, "math": 4, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(21)", "專二(11)"]
-    },
-    {
-        "id": "113006",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "財務金融系",
-        "ratios": { "chi": 0, "eng": 0, "math": 5, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(11)", "專一(12)", "專二(12)"]
-    },
-    {
-        "id": "113009",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "會計資訊系",
-        "ratios": { "chi": 0, "eng": 0, "math": 0, "pro1": 5, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["專一(11)", "專二(12)"]
-    },
-    {
-        "id": "113022",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "流通管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 6, "pro1": 3, "pro2": 0 },
-        "change": "數學: 5→6",
-        "screening": ["數學(10)", "專一(12)"]
-    },
-    {
-        "id": "113025",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "應用統計系",
-        "ratios": { "chi": 0, "eng": 0, "math": 4, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(8)", "專一(9)", "專二(8)"]
-    },
-    {
-        "id": "113026",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "休閒事業經營系",
-        "ratios": { "chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "英文: 0→4, 數學: 4→0",
-        "screening": ["數學(10)", "專一專二(17)"]
-    },
-    {
-        "id": "113028",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "保險金融管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 5, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["數學(8)", "專一(10)", "專二(10)"]
-    },
-    {
-        "id": "113030",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "企業管理系",
-        "ratios": { "chi": 0, "eng": 0, "math": 0, "pro1": 3, "pro2": 6 },
-        "change": "無變更",
-        "screening": ["專二(11)", "專一(11)"]
-    },
-    {
-        "id": "113033",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "應用英語系",
-        "ratios": { "chi": 7, "eng": 7, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文英文(21)", "專一專二(20)"]
-    },
-    {
-        "id": "113036",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "應用日語系",
-        "ratios": { "chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "無變更",
-        "screening": ["英文(12)", "專一(11)"]
-    },
-    {
-        "id": "113037",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "應用中文系",
-        "ratios": { "chi": 5, "eng": 0, "math": 0, "pro1": 3, "pro2": 0 },
-        "change": "國文: 0→5, 英文: 4→0, 專二: 4→0",
-        "screening": ["英文專二(22)", "專一(11)"]
-    },
-    {
-        "id": "113043",
-        "group": "商管群",
-        "school": "國立臺中科技大學",
-        "dept": "老人服務事業管理系",
-        "ratios": { "chi": 6, "eng": 4, "math": 0, "pro1": 0, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(8)", "英文(6)", "專二(8)"]
-    },
-    {
-        "id": "114001",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "會計資訊系（臺北校區）",
-        "ratios": { "chi": 0, "eng": 5, "math": 5, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(25)", "專一專二(26)"]
-    },
-    {
-        "id": "114002",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "財務金融系（臺北校區）",
-        "ratios": { "chi": 0, "eng": 6, "math": 6, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(27)", "專一專二(27)"]
-    },
-    {
-        "id": "114003",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "財政稅務系（臺北校區）",
-        "ratios": { "chi": 0, "eng": 10, "math": 0, "pro1": 5, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(11)", "專一(13)", "專二(13)"]
-    },
-    {
-        "id": "114004",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "國際商務系（臺北校區）",
-        "ratios": { "chi": 0, "eng": 6, "math": 5, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(13)", "數學(11)", "專一(12)", "專二(11)"]
-    },
-    {
-        "id": "114007",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "企業管理系（臺北校區）",
-        "ratios": { "chi": 0, "eng": 0, "math": 0, "pro1": 5, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["專一(13)", "專二(13)"]
-    },
-    {
-        "id": "114015",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "商業設計管理系（桃園校區）",
-        "ratios": { "chi": 9, "eng": 12, "math": 0, "pro1": 6, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文(10)", "國文(10)", "專一(11)", "專二(11)"]
-    },
-    {
-        "id": "114017",
-        "group": "商管群",
-        "school": "國立臺北商業大學",
-        "dept": "數位多媒體設計系（桃園校區）",
-        "ratios": { "chi": 15, "eng": 0, "math": 0, "pro1": 3, "pro2": 5 },
-        "change": "國文: 0→15, 數學: 6→0",
-        "screening": ["數學(11)", "專二(10)", "專一(12)"]
-    },
-    {
-        "id": "503408",
-        "group": "商管群",
-        "school": "國立臺東專科學校",
-        "dept": "資訊管理科",
-        "ratios": { "chi": 6, "eng": 5, "math": 0, "pro1": 4, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(6)", "英文(3)", "專一(0)", "專二(4)"]
-    },
-    {
-        "id": "503417",
-        "group": "商管群",
-        "school": "國立臺東專科學校",
-        "dept": "行銷與流通管理科",
-        "ratios": { "chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文(5)", "英文(3)", "數學(3)", "專一專二(9)"]
-    },
-    {
-        "id": "701001",
-        "group": "商管群",
-        "school": "國立政治大學",
-        "dept": "金融學系",
-        "ratios": { "chi": 3, "eng": 3, "math": 3, "pro1": 2, "pro2": 2 },
-        "change": "無變更",
-        "screening": ["國文英文數學(44)", "專一專二(29)"]
-    },
-    {
-        "id": "705001",
-        "group": "商管群",
-        "school": "國立成功大學",
-        "dept": "會計學系",
-        "ratios": { "chi": 0, "eng": 5, "math": 5, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(29)", "專一專二(29)"]
-    },
-    {
-        "id": "706001",
-        "group": "商管群",
-        "school": "國立中興大學",
-        "dept": "企業管理學系",
-        "ratios": { "chi": 0, "eng": 4, "math": 4, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["英文數學(29)", "專一(14)", "專二(14)"]
-    },
-    {
-        "id": "706007",
-        "group": "商管群",
-        "school": "國立中興大學",
-        "dept": "會計學系",
-        "ratios": { "chi": 4, "eng": 4, "math": 0, "pro1": 3, "pro2": 3 },
-        "change": "無變更",
-        "screening": ["國文英文(27)", "專一專二(28)"]
-    }
-];
+        {
+            "id": "101013", "group": "商管群", "school": "國立臺灣科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 4, "eng": 4, "math": 4, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(13)", "英文(13)", "數學(14)", "專一專二(27)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 67
+        },
+        {
+            "id": "101014", "group": "資管類", "school": "國立臺灣科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 5, "eng": 4, "math": 3, "pro1": 2, "pro2": 2}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "101016", "group": "資管類", "school": "國立臺灣科技大學", "dept": "資訊管理系（資安人才）", 
+            "ratios": {"chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 3}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "102020", "group": "商管群", "school": "國立雲林科技大學", "dept": "工業工程與管理系", 
+            "ratios": {"chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(11)", "專一(13)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "102021", "group": "商管群", "school": "國立雲林科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 10, "eng": 8, "math": 6, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(11)", "英文(12)", "數學(11)", "專一專二(25)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "102024", "group": "資管類", "school": "國立雲林科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 0, "eng": 7, "math": 7, "pro1": 3, "pro2": 4}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "102026", "group": "商管群", "school": "國立雲林科技大學", "dept": "財務金融系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 10, "pro1": 7, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(13)", "專一(13)", "專二(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 66
+        },
+        {
+            "id": "102028", "group": "商管群", "school": "國立雲林科技大學", "dept": "會計系", 
+            "ratios": {"chi": 7, "eng": 7, "math": 7, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文英文數學(28)", "專一專二(26)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 63
+        },
+        {
+            "id": "102029", "group": "商管群", "school": "國立雲林科技大學", "dept": "國際管理學士學位學程", 
+            "ratios": {"chi": 0, "eng": 6, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(13)", "專一(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 62
+        },
+        {
+            "id": "102045", "group": "商管群", "school": "國立雲林科技大學", "dept": "應用外語系", 
+            "ratios": {"chi": 7, "eng": 5, "math": 8, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(11)", "國文(10)", "英文(13)", "專一專二(23)"], 
+            "tiebreakerV": { "chi": true, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 47
+        },
+        {
+            "id": "102049", "group": "商管群", "school": "國立雲林科技大學", "dept": "文化資產維護系", 
+            "ratios": {"chi": 6, "eng": 5, "math": 0, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(11)", "英文(10)", "專一(11)", "專二(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 44
+        },
+        {
+            "id": "103008", "group": "商管群", "school": "國立屏東科技大學", "dept": "植物醫學系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "專二: 3→0", 
+            "screening": ["國文(10)", "專一專二(18)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 37
+        },
+        {
+            "id": "103025", "group": "資管類", "school": "國立屏東科技大學", "dept": "水土保持系", 
+            "ratios": {"chi": 7, "eng": 0, "math": 0, "pro1": 0, "pro2": 3}, "change": "國文: 0→7, 專一: 7→0", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "103033", "group": "商管群", "school": "國立屏東科技大學", "dept": "農企業管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 5, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(7)", "專二(8)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 40
+        },
+        {
+            "id": "103037", "group": "資管類", "school": "國立屏東科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 0, "pro1": 6, "pro2": 3}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "103039", "group": "商管群", "school": "國立屏東科技大學", "dept": "工業管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "英文: 5→0, 專二: 3→0", 
+            "screening": ["國文(4)", "英文(3)", "專一專二(17)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 34
+        },
+        {
+            "id": "103040", "group": "商管群", "school": "國立屏東科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 4}, "change": "無變更", 
+            "screening": ["國文(8)", "專二(8)", "專一(10)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 36
+        },
+        {
+            "id": "103045", "group": "商管群", "school": "國立屏東科技大學", "dept": "時尚設計與管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(11)", "專一(8)"], 
+            "tiebreakerV": { "chi": false, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 50
+        },
+        {
+            "id": "103047", "group": "商管群", "school": "國立屏東科技大學", "dept": "財務金融國際學士學位學程", 
+            "ratios": {"chi": 0, "eng": 7, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(9)", "專一專二(22)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 43
+        },
+        {
+            "id": "103050", "group": "商管群", "school": "國立屏東科技大學", "dept": "應用外語系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 0, "pro1": 0, "pro2": 3}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "103053", "group": "商管群", "school": "國立屏東科技大學", "dept": "社會工作系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(7)", "專一專二(17)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 39
+        },
+        {
+            "id": "103056", "group": "商管群", "school": "國立屏東科技大學", "dept": "休閒運動健康系", 
+            "ratios": {"chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(8)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 31
+        },
+        {
+            "id": "103058", "group": "資管類", "school": "國立屏東科技大學", "dept": "休閒運動健康系", 
+            "ratios": {"chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "104024", "group": "商管群", "school": "國立臺北科技大學", "dept": "工業工程與管理系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 4, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(27)", "專二(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 65
+        },
+        {
+            "id": "104025", "group": "商管群", "school": "國立臺北科技大學", "dept": "經營管理系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(13)", "專一專二(27)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 65
+        },
+        {
+            "id": "104027", "group": "商管群", "school": "國立臺北科技大學", "dept": "資訊與財金管理系", 
+            "ratios": {"chi": 6, "eng": 6, "math": 6, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文英文數學(39)", "專一(14)", "專二(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 69
+        },
+        {
+            "id": "105005", "group": "商管群", "school": "國立高雄科技大學", "dept": "工業工程與管理系", 
+            "ratios": {"chi": 5, "eng": 0, "math": 7, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["數學(11)", "國文(11)", "專一(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "105044", "group": "商管群", "school": "國立高雄科技大學", "dept": "國際企業系", 
+            "ratios": {"chi": 7, "eng": 5, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 9→7, 英文: 6→5", 
+            "screening": ["國文(11)", "英文(12)", "專一(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 39
+        },
+        {
+            "id": "105047", "group": "商管群", "school": "國立高雄科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 4→8, 英文: 6→0", 
+            "screening": ["國文(11)", "英文(12)", "專一(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 52
+        },
+        {
+            "id": "105051", "group": "商管群", "school": "國立高雄科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3}, "change": "專一: 5→4", 
+            "screening": ["英文數學(22)", "專一(12)", "專二(13)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105052", "group": "資管類", "school": "國立高雄科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3}, "change": "專一: 5→4", 
+            "screening": [], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105053", "group": "商管群", "school": "國立高雄科技大學", "dept": "運籌管理系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 5, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(22)", "專一(12)", "專二(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 44
+        },
+        {
+            "id": "105056", "group": "商管群", "school": "國立高雄科技大學", "dept": "行銷與流通管理系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 5, "pro1": 0, "pro2": 3}, "change": "國文: 4→0, 數學: 4→5, 專一: 3→0", 
+            "screening": ["國文英文數學(32)", "專一專二(22)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 44
+        },
+        {
+            "id": "105059", "group": "商管群", "school": "國立高雄科技大學", "dept": "風險管理與保險系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 4, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(11)", "數學(11)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 43
+        },
+        {
+            "id": "105061", "group": "資管類", "school": "國立高雄科技大學", "dept": "風險管理與保險系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 4, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105062", "group": "商管群", "school": "國立高雄科技大學", "dept": "金融系", 
+            "ratios": {"chi": 7, "eng": 5, "math": 0, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(11)", "英文(11)", "專二(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 52
+        },
+        {
+            "id": "105063", "group": "商管群", "school": "國立高雄科技大學", "dept": "財務管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 5, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(13)", "專二(13)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 52
+        },
+        {
+            "id": "105064", "group": "商管群", "school": "國立高雄科技大學", "dept": "人力資源發展系", 
+            "ratios": {"chi": 6, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(10)", "英文(11)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 41
+        },
+        {
+            "id": "105065", "group": "商管群", "school": "國立高雄科技大學", "dept": "會計資訊系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 0, "pro1": 0, "pro2": 3}, "change": "國文: 4→8", 
+            "screening": ["國文(11)", "專二(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 41
+        },
+        {
+            "id": "105066", "group": "商管群", "school": "國立高雄科技大學", "dept": "金融資訊系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 6, "pro1": 4, "pro2": 3}, "change": "國文: 8→0, 英文: 0→6, 專一: 3→4", 
+            "screening": ["國文(10)", "英文(11)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 64
+        },
+        {
+            "id": "105067", "group": "資管類", "school": "國立高雄科技大學", "dept": "金融資訊系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 6, "pro1": 3, "pro2": 3}, "change": "國文: 8→6", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105068", "group": "商管群", "school": "國立高雄科技大學", "dept": "財政稅務系", 
+            "ratios": {"chi": 8, "eng": 6, "math": 0, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(11)", "英文(11)", "專二(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 46
+        },
+        {
+            "id": "105069", "group": "商管群", "school": "國立高雄科技大學", "dept": "觀光管理系", 
+            "ratios": {"chi": 7, "eng": 7, "math": 0, "pro1": 3, "pro2": 5}, "change": "國文: 4→7, 英文: 0→7, 專二: 0→5", 
+            "screening": ["國文(11)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 37
+        },
+        {
+            "id": "105073", "group": "商管群", "school": "國立高雄科技大學", "dept": "智慧商務系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(11)", "專一(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 38
+        },
+        {
+            "id": "105074", "group": "資管類", "school": "國立高雄科技大學", "dept": "智慧商務系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105075", "group": "商管群", "school": "國立高雄科技大學", "dept": "航運管理系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 0, "pro1": 3, "pro2": 4}, "change": "無變更", 
+            "screening": ["英文(11)", "專二(10)", "專一(11)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 48
+        },
+        {
+            "id": "105078", "group": "商管群", "school": "國立高雄科技大學", "dept": "商務資訊應用系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(13)", "數學(8)", "專一(10)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 44
+        },
+        {
+            "id": "105079", "group": "資管類", "school": "國立高雄科技大學", "dept": "商務資訊應用系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "105080", "group": "商管群", "school": "國立高雄科技大學", "dept": "供應鏈管理系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 4, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(11)", "數學(10)", "專一(10)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 46
+        },
+        {
+            "id": "105083", "group": "商管群", "school": "國立高雄科技大學", "dept": "海洋休閒管理系", 
+            "ratios": {"chi": 0, "eng": 8, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(10)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": false, "pro2": true }, "tiebreakerSum": 38
+        },
+        {
+            "id": "105086", "group": "商管群", "school": "國立高雄科技大學", "dept": "應用英語系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(13)", "專一(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 41
+        },
+        {
+            "id": "105088", "group": "商管群", "school": "國立高雄科技大學", "dept": "應用日語系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(13)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 44
+        },
+        {
+            "id": "105091", "group": "商管群", "school": "國立高雄科技大學", "dept": "應用德語系", 
+            "ratios": {"chi": 6, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(8)", "英文(12)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 41
+        },
+        {
+            "id": "105095", "group": "商管群", "school": "國立高雄科技大學", "dept": "文化創意產業系", 
+            "ratios": {"chi": 5, "eng": 5, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 4→5, 英文: 4→5, 專二: 3→0", 
+            "screening": ["國文英文(22)", "專一專二(21)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 43
+        },
+        {
+            "id": "105101", "group": "商管群", "school": "國立高雄科技大學", "dept": "漁業科技與管理系", 
+            "ratios": {"chi": 7, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(6)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 29
+        },
+        {
+            "id": "105118", "group": "商管群", "school": "國立高雄科技大學", "dept": "航運技術系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(10)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 42
+        },
+        {
+            "id": "105124", "group": "商管群", "school": "國立高雄科技大學", "dept": "海事資訊科技系", 
+            "ratios": {"chi": 0, "eng": 6, "math": 6, "pro1": 3, "pro2": 0}, "change": "國文: 3→0, 英文: 5→6, 數學: 4→6, 專二: 2→0", 
+            "screening": ["英文(12)", "數學(6)", "國文專一(18)", "專二(8)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 37
+        },
+        {
+            "id": "107024", "group": "資管類", "school": "國立虎尾科技大學", "dept": "資訊工程系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 7, "pro1": 3, "pro2": 0}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "107030", "group": "商管群", "school": "國立虎尾科技大學", "dept": "工業管理系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 9, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(6)", "國文(9)", "專二(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 45
+        },
+        {
+            "id": "107032", "group": "商管群", "school": "國立虎尾科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 14, "eng": 0, "math": 0, "pro1": 3, "pro2": 10}, "change": "無變更", 
+            "screening": ["國文(9)", "專二(10)", "專一(13)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 38
+        },
+        {
+            "id": "107033", "group": "資管類", "school": "國立虎尾科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 14, "eng": 0, "math": 0, "pro1": 3, "pro2": 10}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "107034", "group": "商管群", "school": "國立虎尾科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 9, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(10)", "專一(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 35
+        },
+        {
+            "id": "107036", "group": "商管群", "school": "國立虎尾科技大學", "dept": "財務金融系", 
+            "ratios": {"chi": 0, "eng": 11, "math": 0, "pro1": 7, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(10)", "專一(11)", "專二(12)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 46
+        },
+        {
+            "id": "107044", "group": "商管群", "school": "國立虎尾科技大學", "dept": "應用外語系", 
+            "ratios": {"chi": 0, "eng": 9, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(6)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 38
+        },
+        {
+            "id": "109011", "group": "商管群", "school": "國立澎湖科技大學", "dept": "行銷與物流管理系", 
+            "ratios": {"chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(4)", "專一(4)"], 
+            "tiebreakerV": { "chi": true, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 20
+        },
+        {
+            "id": "109012", "group": "商管群", "school": "國立澎湖科技大學", "dept": "航運管理系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(2)", "專一專二(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 23
+        },
+        {
+            "id": "109015", "group": "商管群", "school": "國立澎湖科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 0→10, 數學: 5→0", 
+            "screening": ["數學(2)", "專一(4)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "109016", "group": "商管群", "school": "國立澎湖科技大學", "dept": "應用外語系", 
+            "ratios": {"chi": 5, "eng": 4, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(5)", "英文(3)", "專一專二(7)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "109019", "group": "商管群", "school": "國立澎湖科技大學", "dept": "觀光休閒系", 
+            "ratios": {"chi": 4, "eng": 0, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(5)", "專一專二(9)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "109022", "group": "商管群", "school": "國立澎湖科技大學", "dept": "餐旅管理系", 
+            "ratios": {"chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 0→10, 數學: 5→0", 
+            "screening": ["數學(4)", "專一(5)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "109024", "group": "商管群", "school": "國立澎湖科技大學", "dept": "海洋遊憩系", 
+            "ratios": {"chi": 10, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(5)", "專一(5)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "110012", "group": "資管類", "school": "國立勤益科技大學", "dept": "資訊工程系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "110022", "group": "商管群", "school": "國立勤益科技大學", "dept": "工業工程與管理系", 
+            "ratios": {"chi": 5, "eng": 0, "math": 5, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文數學(19)", "專一專二(20)"], 
+            "tiebreakerV": { "chi": true, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 41
+        },
+        {
+            "id": "110026", "group": "商管群", "school": "國立勤益科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 0, "pro1": 3, "pro2": 6}, "change": "無變更", 
+            "screening": ["專二(9)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 55
+        },
+        {
+            "id": "110029", "group": "商管群", "school": "國立勤益科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 5}, "change": "無變更", 
+            "screening": ["國文(10)", "專二(10)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 43
+        },
+        {
+            "id": "110030", "group": "資管類", "school": "國立勤益科技大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 5}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "110031", "group": "商管群", "school": "國立勤益科技大學", "dept": "行銷與流通管理系", 
+            "ratios": {"chi": 6, "eng": 5, "math": 5, "pro1": 3, "pro2": 0}, "change": "國文: 5→6, 英文: 4→5, 數學: 4→5", 
+            "screening": ["國文(10)", "英文數學(18)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 52
+        },
+        {
+            "id": "110032", "group": "資管類", "school": "國立勤益科技大學", "dept": "行銷與流通管理系", 
+            "ratios": {"chi": 5, "eng": 5, "math": 5, "pro1": 3, "pro2": 0}, "change": "國文: 4→5, 英文: 4→5, 數學: 4→5", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "110033", "group": "商管群", "school": "國立勤益科技大學", "dept": "健康產業科技研發與管理系", 
+            "ratios": {"chi": 6, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(10)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 50
+        },
+        {
+            "id": "110036", "group": "商管群", "school": "國立勤益科技大學", "dept": "應用英語系", 
+            "ratios": {"chi": 6, "eng": 6, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文英文(22)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 45
+        },
+        {
+            "id": "110039", "group": "商管群", "school": "國立勤益科技大學", "dept": "文化創意事業系", 
+            "ratios": {"chi": 5, "eng": 6, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(10)", "國文(9)", "專一(10)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 49
+        },
+        {
+            "id": "110046", "group": "商管群", "school": "國立勤益科技大學", "dept": "人工智慧應用工程系", 
+            "ratios": {"chi": 5, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "110048", "group": "資管類", "school": "國立勤益科技大學", "dept": "資訊管理系（資安人才）", 
+            "ratios": {"chi": 50, "eng": 0, "math": 0, "pro1": 49, "pro2": 49}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "111001", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "護理系", 
+            "ratios": {"chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 0}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "111004", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "高齡健康照護系", 
+            "ratios": {"chi": 4, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文英文(20)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": false }, "tiebreakerSum": 52
+        },
+        {
+            "id": "111007", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "健康事業管理系", 
+            "ratios": {"chi": 0, "eng": 8, "math": 4, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(7)", "數學(10)", "專二(9)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 53
+        },
+        {
+            "id": "111009", "group": "資管類", "school": "國立臺北護理健康大學", "dept": "健康事業管理系", 
+            "ratios": {"chi": 0, "eng": 8, "math": 4, "pro1": 0, "pro2": 3}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "111012", "group": "資管類", "school": "國立臺北護理健康大學", "dept": "資訊管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 8, "pro1": 6, "pro2": 3}, "change": "無變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "111013", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "休閒產業與健康促進系", 
+            "ratios": {"chi": 0, "eng": 8, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(13)", "專一(12)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": false, "pro1": true, "pro2": false }, "tiebreakerSum": 48
+        },
+        {
+            "id": "111023", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "運動保健系", 
+            "ratios": {"chi": 8, "eng": 8, "math": 0, "pro1": 8, "pro2": 3}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "111025", "group": "商管群", "school": "國立臺北護理健康大學", "dept": "生死與健康心理諮商系", 
+            "ratios": {"chi": 8, "eng": 5, "math": 0, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(11)", "英文(11)", "專二(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": false, "pro2": true }, "tiebreakerSum": 56
+        },
+        {
+            "id": "111028", "group": "資管類", "school": "國立臺北護理健康大學", "dept": "資訊管理系（資安人才）", 
+            "ratios": {"chi": 0, "eng": 0, "math": 8, "pro1": 6, "pro2": 3}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "112003", "group": "商管群", "school": "國立高雄餐旅大學", "dept": "餐旅暨會展行銷管理系", 
+            "ratios": {"chi": 5, "eng": 4, "math": 4, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["國文(11)", "英文數學(20)", "專一(9)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 43
+        },
+        {
+            "id": "112007", "group": "商管群", "school": "國立高雄餐旅大學", "dept": "旅運管理系", 
+            "ratios": {"chi": 8, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "新系科或名稱變更", 
+            "screening": [], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "112009", "group": "商管群", "school": "國立高雄餐旅大學", "dept": "航空暨運輸服務管理系", 
+            "ratios": {"chi": 4, "eng": 4, "math": 4, "pro1": 0, "pro2": 3}, "change": "專一: 3→0", 
+            "screening": ["國文英文數學(31)", "專一專二(20)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 53
+        },
+        {
+            "id": "112012", "group": "商管群", "school": "國立高雄餐旅大學", "dept": "休閒暨遊憩管理系", 
+            "ratios": {"chi": 8, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 0→8, 英文: 4→0", 
+            "screening": ["英文(11)", "專一(9)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": false }, "tiebreakerSum": 38
+        },
+        {
+            "id": "113001", "group": "商管群", "school": "國立臺中科技大學", "dept": "國際貿易與經營系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 5, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(5)", "英文(11)", "專一專二(22)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 53
+        },
+        {
+            "id": "113003", "group": "商管群", "school": "國立臺中科技大學", "dept": "財政稅務系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 4, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(21)", "專二(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": false, "pro2": true }, "tiebreakerSum": 42
+        },
+        {
+            "id": "113006", "group": "商管群", "school": "國立臺中科技大學", "dept": "財務金融系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 5, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(11)", "專一(12)", "專二(12)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 50
+        },
+        {
+            "id": "113009", "group": "商管群", "school": "國立臺中科技大學", "dept": "會計資訊系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 0, "pro1": 5, "pro2": 3}, "change": "無變更", 
+            "screening": ["專一(11)", "專二(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 56
+        },
+        {
+            "id": "113022", "group": "商管群", "school": "國立臺中科技大學", "dept": "流通管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 6, "pro1": 3, "pro2": 0}, "change": "數學: 5→6", 
+            "screening": ["數學(10)", "專一(12)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 59
+        },
+        {
+            "id": "113025", "group": "商管群", "school": "國立臺中科技大學", "dept": "應用統計系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 4, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(8)", "專一(9)", "專二(8)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 46
+        },
+        {
+            "id": "113026", "group": "商管群", "school": "國立臺中科技大學", "dept": "休閒事業經營系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 3}, "change": "英文: 0→4, 數學: 4→0", 
+            "screening": ["數學(10)", "專一專二(17)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "113028", "group": "商管群", "school": "國立臺中科技大學", "dept": "保險金融管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 5, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["數學(8)", "專一(10)", "專二(10)"], 
+            "tiebreakerV": { "chi": false, "eng": false, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 45
+        },
+        {
+            "id": "113030", "group": "商管群", "school": "國立臺中科技大學", "dept": "企業管理系", 
+            "ratios": {"chi": 0, "eng": 0, "math": 0, "pro1": 3, "pro2": 6}, "change": "無變更", 
+            "screening": ["專二(11)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 52
+        },
+        {
+            "id": "113033", "group": "商管群", "school": "國立臺中科技大學", "dept": "應用英語系", 
+            "ratios": {"chi": 7, "eng": 7, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文英文(21)", "專一專二(20)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 42
+        },
+        {
+            "id": "113036", "group": "商管群", "school": "國立臺中科技大學", "dept": "應用日語系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 0, "pro1": 3, "pro2": 0}, "change": "無變更", 
+            "screening": ["英文(12)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": false }, "tiebreakerSum": 43
+        },
+        {
+            "id": "113037", "group": "商管群", "school": "國立臺中科技大學", "dept": "應用中文系", 
+            "ratios": {"chi": 5, "eng": 0, "math": 0, "pro1": 3, "pro2": 0}, "change": "國文: 0→5, 英文: 4→0, 專二: 4→0", 
+            "screening": ["英文專二(22)", "專一(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 43
+        },
+        {
+            "id": "113043", "group": "商管群", "school": "國立臺中科技大學", "dept": "老人服務事業管理系", 
+            "ratios": {"chi": 6, "eng": 4, "math": 0, "pro1": 0, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(8)", "英文(6)", "專二(8)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 32
+        },
+        {
+            "id": "114001", "group": "商管群", "school": "國立臺北商業大學", "dept": "會計資訊系（臺北校區）", 
+            "ratios": {"chi": 0, "eng": 5, "math": 5, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(25)", "專一專二(26)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 53
+        },
+        {
+            "id": "114002", "group": "商管群", "school": "國立臺北商業大學", "dept": "財務金融系（臺北校區）", 
+            "ratios": {"chi": 0, "eng": 6, "math": 6, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(27)", "專一專二(27)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 55
+        },
+        {
+            "id": "114003", "group": "商管群", "school": "國立臺北商業大學", "dept": "財政稅務系（臺北校區）", 
+            "ratios": {"chi": 0, "eng": 10, "math": 0, "pro1": 5, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(11)", "專一(13)", "專二(13)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "114004", "group": "商管群", "school": "國立臺北商業大學", "dept": "國際商務系（臺北校區）", 
+            "ratios": {"chi": 0, "eng": 6, "math": 5, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(13)", "數學(11)", "專一(12)", "專二(11)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 52
+        },
+        {
+            "id": "114007", "group": "商管群", "school": "國立臺北商業大學", "dept": "企業管理系（臺北校區）", 
+            "ratios": {"chi": 0, "eng": 0, "math": 0, "pro1": 5, "pro2": 3}, "change": "無變更", 
+            "screening": ["專一(13)", "專二(13)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 51
+        },
+        {
+            "id": "114015", "group": "商管群", "school": "國立臺北商業大學", "dept": "商業設計管理系（桃園校區）", 
+            "ratios": {"chi": 9, "eng": 12, "math": 0, "pro1": 6, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文(10)", "國文(10)", "專一(11)", "專二(11)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 47
+        },
+        {
+            "id": "114017", "group": "商管群", "school": "國立臺北商業大學", "dept": "數位多媒體設計系（桃園校區）", 
+            "ratios": {"chi": 15, "eng": 0, "math": 0, "pro1": 3, "pro2": 5}, "change": "國文: 0→15, 數學: 6→0", 
+            "screening": ["數學(11)", "專二(10)", "專一(12)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 46
+        },
+        {
+            "id": "503408", "group": "商管群", "school": "國立臺東專科學校", "dept": "資訊管理科", 
+            "ratios": {"chi": 6, "eng": 5, "math": 0, "pro1": 4, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(6)", "英文(3)", "專一(0)", "專二(4)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "503417", "group": "商管群", "school": "國立臺東專科學校", "dept": "行銷與流通管理科", 
+            "ratios": {"chi": 6, "eng": 5, "math": 4, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文(5)", "英文(3)", "數學(3)", "專一專二(9)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "701001", "group": "商管群", "school": "國立政治大學", "dept": "金融學系", 
+            "ratios": {"chi": 3, "eng": 3, "math": 3, "pro1": 2, "pro2": 2}, "change": "無變更", 
+            "screening": ["國文英文數學(44)", "專一專二(29)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": null
+        },
+        {
+            "id": "705001", "group": "商管群", "school": "國立成功大學", "dept": "會計學系", 
+            "ratios": {"chi": 0, "eng": 5, "math": 5, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(29)", "專一專二(29)"], 
+            "tiebreakerV": { "chi": false, "eng": true, "math": true, "pro1": true, "pro2": true }, "tiebreakerSum": 58
+        },
+        {
+            "id": "706001", "group": "商管群", "school": "國立中興大學", "dept": "企業管理學系", 
+            "ratios": {"chi": 0, "eng": 4, "math": 4, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["英文數學(29)", "專一(14)", "專二(14)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": true, "pro1": true, "pro2": false }, "tiebreakerSum": 59
+        },
+        {
+            "id": "706007", "group": "商管群", "school": "國立中興大學", "dept": "會計學系", 
+            "ratios": {"chi": 4, "eng": 4, "math": 0, "pro1": 3, "pro2": 3}, "change": "無變更", 
+            "screening": ["國文英文(27)", "專一專二(28)"], 
+            "tiebreakerV": { "chi": true, "eng": true, "math": false, "pro1": true, "pro2": true }, "tiebreakerSum": 55
+        }
+    ];
 
     const App = () => {
         // State
@@ -1166,6 +801,33 @@
         };
         const subjectShortLabels = {
             chi: "國", eng: "英", math: "數", pro1: "專一", pro2: "專二"
+        };
+
+        // Tiebreaker String Generator
+        const renderTiebreaker = (item) => {
+            // 優先使用 tiebreakerV 判斷
+            if (item.tiebreakerV) {
+                const subjects = [];
+                if (item.tiebreakerV.chi) subjects.push("國");
+                if (item.tiebreakerV.eng) subjects.push("英");
+                if (item.tiebreakerV.math) subjects.push("數");
+                if (item.tiebreakerV.pro1) subjects.push("專一");
+                if (item.tiebreakerV.pro2) subjects.push("專二");
+
+                if (subjects.length === 0) return <span className="text-gray-400">無採計科目</span>;
+
+                const formula = `(${subjects.join('+')})級分和`;
+                const scoreDisplay = item.tiebreakerSum && item.tiebreakerSum !== "無資料" ? `(${item.tiebreakerSum})` : "";
+                
+                return (
+                    <div className="flex flex-wrap items-center gap-1">
+                        <span className="font-bold text-orange-700">{formula}</span>
+                        {scoreDisplay && <span className="bg-orange-600 text-white text-xs px-1.5 py-0.5 rounded ml-1">{scoreDisplay}</span>}
+                    </div>
+                );
+            } 
+            
+            return <span className="text-gray-400 italic">無資料</span>;
         };
 
         // Filter Logic
@@ -1240,9 +902,6 @@
                         </h1>
                         <p className="text-teal-100 text-lg max-w-2xl font-light">
                             專為商管群與資管類考生設計，整合國立科技大學最新倍率與去年通過標準。
-                            <span className="bg-yellow-500/20 px-2 py-0.5 rounded text-yellow-100 text-sm ml-2 border border-yellow-500/30">
-                                <i className="fa-solid fa-wrench mr-1"></i>資料修正版：已移除超額篩選欄位
-                            </span>
                         </p>
                     </div>
                 </div>
@@ -1329,10 +988,10 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <p className="mb-1"><strong className="text-teal-700">【級分換算】</strong>：統測單科滿分100分，換算為15級分制。計算公式：(原始分數/100) × 15，無條件捨去取整數。</p>
-                                    <p className="mb-1"><strong className="text-blue-700">【第一階段篩選】</strong>：先比倍率科目(如國文、英文)，此為門檻。</p>
+                                    <p className="mb-1"><strong className="text-orange-700">【同級分超額篩選】</strong>：若第一階段篩選後人數仍超過預計甄試人數，則進行此步驟。</p>
                                 </div>
                                 <div>
-                                    <p className="mb-1 text-gray-500">此版本專注於第一階段篩選標準查詢。</p>
+                                    <p className="mb-1"><strong className="text-blue-700">【第一階段篩選】</strong>：先比倍率科目(如國文、英文)，此為門檻。</p>
                                 </div>
                             </div>
                         </div>
@@ -1356,10 +1015,10 @@
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th scope="col" className="table-header w-4/12">學校科系 (代碼)</th>
-                                        <th scope="col" className="table-header w-3/12 text-center">115年 篩選倍率</th>
+                                        <th scope="col" className="table-header w-3/12">學校科系 (代碼)</th>
+                                        <th scope="col" className="table-header w-2/12 text-center">115年 篩選倍率</th>
                                         <th scope="col" className="table-header w-2/12">變更說明</th>
-                                        <th scope="col" className="table-header w-3/12">114年 第一階段通過標準</th>
+                                        <th scope="col" className="table-header w-5/12">114年 通過標準 (兩階段)</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-100">
@@ -1422,6 +1081,7 @@
                                                 </td>
                                                 <td className="table-cell">
                                                     <div className="flex flex-col gap-3">
+                                                        
                                                         {/* 第一階段篩選 */}
                                                         <div className="text-xs text-gray-600 bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 leading-relaxed">
                                                             <strong className="block text-blue-800 mb-1.5 border-b border-blue-200 pb-1">
@@ -1437,6 +1097,17 @@
                                                                 <span className="text-gray-400 italic">無資料或新科系</span>
                                                             )}
                                                         </div>
+
+                                                        {/* 同級分超額篩選 (動態生成) */}
+                                                        <div className="text-xs text-gray-600 bg-orange-50/50 p-2.5 rounded-lg border border-orange-100 leading-relaxed">
+                                                            <strong className="block text-orange-800 mb-1.5 border-b border-orange-200 pb-1 flex justify-between">
+                                                                <span><i className="fa-solid fa-scale-balanced mr-1"></i>同級分超額篩選</span>
+                                                            </strong>
+                                                            <div className="pl-2">
+                                                                {renderTiebreaker(item)}
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </td>
                                             </tr>
